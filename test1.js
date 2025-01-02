@@ -1,6 +1,9 @@
 const boxes = document.querySelectorAll(".box");
 let turn = "X";
 let vsComputer = false;
+let scoreX = 0;
+let scoreO = 0;
+let startWithX = true; // Flag to alternate starting player
 
 document.getElementById("vsPlayer").addEventListener("click", () => {
   vsComputer = false;
@@ -14,6 +17,7 @@ document.getElementById("vsComputer").addEventListener("click", () => {
 
 function startGame() {
   document.querySelector(".menu").style.display = "none";
+  document.querySelector(".scoreboard").style.display = "flex";
   document.querySelector(".game").style.display = "grid";
   resetGame();
 }
@@ -26,6 +30,7 @@ for (const box of boxes) {
         let winner = turn;
         setTimeout(() => {
           alert(winner + " wins!");
+          updateScore(winner);
           resetGame();
         }, 100);
       } else if (isDraw()) {
@@ -67,6 +72,7 @@ function computerMove() {
     let winner = "O";
     setTimeout(() => {
       alert(winner + " wins!");
+      updateScore(winner);
       resetGame();
     }, 100);
   } else if (isDraw()) {
@@ -108,8 +114,19 @@ function resetGame() {
   for (const box of boxes) {
     box.textContent = "";
   }
-  turn = "X";
+  startWithX = !startWithX; // Alternate starting player
+  turn = startWithX ? "X" : "O";
   if (vsComputer && turn === "O") {
     setTimeout(computerMove, 600); // 0.6-second delay
+  }
+}
+
+function updateScore(winner) {
+  if (winner === "X") {
+    scoreX++;
+    document.getElementById("scoreX").textContent = scoreX;
+  } else if (winner === "O") {
+    scoreO++;
+    document.getElementById("scoreO").textContent = scoreO;
   }
 }
